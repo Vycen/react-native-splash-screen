@@ -2,7 +2,22 @@ package org.devio.rn.splashscreen;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
+import com.facebook.react.ReactActivity;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.lang.ref.WeakReference;
 
 /**
@@ -20,7 +35,7 @@ public class SplashScreen {
     /**
      * 打开启动屏
      */
-    public static void show(final Activity activity, final boolean fullScreen) {
+    public static void show(final Activity activity, final boolean fullScreen, final View view) {
         if (activity == null) return;
         mActivity = new WeakReference<Activity>(activity);
         activity.runOnUiThread(new Runnable() {
@@ -29,7 +44,13 @@ public class SplashScreen {
                 if (!activity.isFinishing()) {
 
                     mSplashDialog = new Dialog(activity, fullScreen ? R.style.SplashScreen_Fullscreen : R.style.SplashScreen_SplashTheme);
-                    mSplashDialog.setContentView(R.layout.launch_screen);
+                    if(view == null) {
+                        mSplashDialog.setContentView(R.layout.launch_screen);
+                    }
+                    else {
+                        mSplashDialog.setContentView(view);
+                    }
+
                     mSplashDialog.setCancelable(false);
 
                     if (!mSplashDialog.isShowing()) {
@@ -43,6 +64,10 @@ public class SplashScreen {
     /**
      * 打开启动屏
      */
+    public static void show(final Activity activity, final boolean fullScreen) {
+        show(activity, fullScreen, null);
+    }
+
     public static void show(final Activity activity) {
         show(activity, false);
     }
